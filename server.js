@@ -56,7 +56,7 @@ app.get("/scrape", function (req, res) {
       result.title = $(this)
         .find("h2")
         .text();
-      result.link = $(this)
+      result.link = "https://www.nytimes.com" + $(this)
         .find("a")
         .attr("href");
       result.summary = $(this)
@@ -119,6 +119,28 @@ app.post("/articles/:id", function (req, res) {
   // then find an article from the req.params.id
   // and update it's "note" property with the _id of the new note
   db.Note.create(req.body)
+    .then(function (dbNote) {
+
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+    })
+    .then(function (dbArticle) {
+      // If the User was updated successfully, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurs, send it back to the client
+      res.json(err);
+    });
+});
+
+// Route for saving/updating an Article's associated Note
+app.delete("/articles/:id", function (req, res) {
+  // TODO
+  // ====
+  // save the new note that gets posted to the Notes collection
+  // then find an article from the req.params.id
+  // and update it's "note" property with the _id of the new note
+  db.Note.remove(req.body)
     .then(function (dbNote) {
 
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
