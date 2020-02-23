@@ -27,10 +27,11 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/Headlines", { useNewUrlParser: true });
-// Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/Headlines";
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
+mongoose.connect(MONGODB_URI);
+
+
 // Routes
 
 // A GET route for scraping the echoJS website
